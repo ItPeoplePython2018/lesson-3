@@ -1,0 +1,580 @@
+(python-lessons) ~/Src/python-lessons/lesson-3[master]$ ipython
+Python 3.6.4 (default, Dec 21 2017, 20:33:21)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 6.4.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: import requests
+
+In [2]: resp = requests.get('https://en.wikipedia.org/wiki/George_Pfister')
+
+In [3]: resp.status_code
+Out[3]: 200
+
+In [4]: resp.text[:10]
+Out[4]: '<!DOCTYPE '
+
+In [5]: resp.text[:100]
+Out[5]: '<!DOCTYPE html>\n<html class="client-nojs" lang="en" dir="ltr">\n<head>\n<meta charset="UTF-8"/>\n<title'
+
+In [6]: resp.text[10:100:-1]
+Out[6]: ''
+
+In [7]: [1,2,3,4][::-1]
+Out[7]: [4, 3, 2, 1]
+
+In [8]: resp.text[100:10:-1]
+Out[8]: '>eltit<\n>/"8-FTU"=tesrahc atem<\n>daeh<\n>"rtl"=rid "ne"=gnal "sjon-tneilc"=ssalc lmth<\n>lmt'
+
+In [9]: resp.text
+Out[9]: '<!DOCTYPE html>\n<html class="client-nojs" ...'
+
+In [10]: %colors no
+/Users/wronglink/.virtualenvs/python-lessons/lib/python3.6/site-packages/IPython/core/magics/basic.py:358: UserWarning: Error changing shell color schemes.
+The 'colors' trait of a TerminalInteractiveShell instance must be any of ['Neutral', 'NoColor', 'LightBG', 'Linux'], but a value of 'no' <class 'str'> was specified.
+  color_switch_err('shell')
+/Users/wronglink/.virtualenvs/python-lessons/lib/python3.6/site-packages/IPython/core/magics/basic.py:365: UserWarning: Error changing exception color schemes.
+Unrecognized color scheme: no
+Valid schemes: ['NoColor', 'Linux', 'LightBG', 'Neutral', '']
+  color_switch_err('exception')
+/Users/wronglink/.virtualenvs/python-lessons/lib/python3.6/site-packages/IPython/core/magics/basic.py:372: UserWarning: Error changing object inspector color schemes.
+Unrecognized color scheme: no
+Valid schemes: ['NoColor', 'Linux', 'LightBG', 'Neutral', '']
+  color_switch_err('object inspector')
+
+In [11]: %colors
+UsageError: %colors: you must specify a color scheme. See '%colors?'
+
+In [12]: %colors?
+Docstring:
+Switch color scheme for prompts, info system and exception handlers.
+
+Currently implemented schemes: NoColor, Linux, LightBG.
+
+Color scheme names are not case-sensitive.
+
+Examples
+--------
+To get a plain black and white terminal::
+
+  %colors nocolor
+File:      ~/.virtualenvs/python-lessons/lib/python3.6/site-packages/IPython/core/magics/basic.py
+
+In [13]: %colors nocolor
+
+In [14]: import bs4
+
+In [15]: bs4.BeautifulSoup?
+
+In [16]: bs4.BeautifulSoup(resp.text)
+/Users/wronglink/.virtualenvs/python-lessons/lib/python3.6/site-packages/bs4/__init__.py:181: UserWarning: No parser was explicitly specified, so I'm using the best available HTML parser for this system ("html.parser"). This usually isn't a problem, but if you run this code on another system, or in a different virtual environment, it may use a different parser and behave differently.
+
+The code that caused this warning is on line 11 of the file /Users/wronglink/.virtualenvs/python-lessons/bin/ipython. To get rid of this warning, change code that looks like this:
+
+ BeautifulSoup(YOUR_MARKUP})
+
+to this:
+
+ BeautifulSoup(YOUR_MARKUP, "html.parser")
+
+  markup_type=markup_type))
+Out[16]:
+<!DOCTYPE html>
+
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+...
+
+In [17]: soup = bs4.BeautifulSoup(resp.text)
+/Users/wronglink/.virtualenvs/python-lessons/lib/python3.6/site-packages/bs4/__init__.py:181: UserWarning: No parser was explicitly specified, so I'm using the best available HTML parser for this system ("html.parser"). This usually isn't a problem, but if you run this code on another system, or in a different virtual environment, it may use a different parser and behave differently.
+
+The code that caused this warning is on line 11 of the file /Users/wronglink/.virtualenvs/python-lessons/bin/ipython. To get rid of this warning, change code that looks like this:
+
+ BeautifulSoup(YOUR_MARKUP})
+
+to this:
+
+ BeautifulSoup(YOUR_MARKUP, "html.parser")
+
+  markup_type=markup_type))
+
+In [18]: soup = bs4.BeautifulSoup(resp.text, "html.parser")
+
+In [19]: soup.find(id='firstHeading')
+Out[19]: <h1 class="firstHeading" id="firstHeading" lang="en">George Pfister</h1>
+
+In [20]: elem = soup.find(id='firstHeading')
+
+In [21]: 'Hello' == "Hello"
+Out[21]: True
+
+In [22]: 'Hello' == "Hello" == '''Hello''' == """Hello"""
+Out[22]: True
+
+In [23]: 'Don't miss'
+  File "<ipython-input-23-0adc0ce928ad>", line 1
+    'Don't miss'
+         ^
+SyntaxError: invalid syntax
+
+
+In [24]: 'Don\'t miss'
+Out[24]: "Don't miss"
+
+In [25]: "Don't miss"
+Out[25]: "Don't miss"
+
+In [26]: "\"Don't miss\""
+Out[26]: '"Don\'t miss"'
+
+In [27]: print("\"Don't miss\"")
+"Don't miss"
+
+In [28]: print(""""Don't miss"""")
+  File "<ipython-input-28-4e23bd7980ea>", line 1
+    print(""""Don't miss"""")
+                             ^
+SyntaxError: EOL while scanning string literal
+
+
+In [29]: print('''"Don't miss"''')
+"Don't miss"
+
+In [30]: elem = soup.find(id='firstHeading')
+
+In [31]: elem.text
+Out[31]: 'George Pfister'
+
+In [32]: elem
+Out[32]: <h1 class="firstHeading" id="firstHeading" lang="en">George Pfister</h1>
+
+In [33]: elem.name
+Out[33]: 'h1'
+
+In [34]: content = soup.find(id='mw-content-text')
+
+In [35]: all_a = content.find_all('a')
+
+In [36]: len(all_al)
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-36-776238df9aba> in <module>()
+----> 1 len(all_al)
+
+NameError: name 'all_al' is not defined
+
+In [37]: len(all_a)
+Out[37]: 70
+
+In [38]: %history
+import requests
+resp = requests.get('https://en.wikipedia.org/wiki/George_Pfister')
+resp.status_code
+resp.text[:10]
+resp.text[:100]
+resp.text[10:100:-1]
+[1,2,3,4][::-1]
+resp.text[100:10:-1]
+resp.text
+%colors no
+%colors
+%colors?
+%colors nocolor
+import bs4
+bs4.BeautifulSoup?
+bs4.BeautifulSoup(resp.text)
+soup = bs4.BeautifulSoup(resp.text)
+soup = bs4.BeautifulSoup(resp.text, "html.parser")
+soup.find(id='firstHeading')
+elem = soup.find(id='firstHeading')
+'Hello' == "Hello"
+'Hello' == "Hello" == '''Hello''' == """Hello"""
+'Don't miss'
+'Don\'t miss'
+"Don't miss"
+"\"Don't miss\""
+print("\"Don't miss\"")
+print(""""Don't miss"""")
+print('''"Don't miss"''')
+elem = soup.find(id='firstHeading')
+elem.text
+elem
+elem.name
+content = soup.find(id='mw-content-text')
+all_a = content.find_all('a')
+len(all_al)
+len(all_a)
+%history
+
+In [39]: a = all_a[0]
+
+In [40]: a.href
+
+In [41]: a = all_a[1]
+
+In [42]: a.href
+
+In [43]: all_a[10].href
+
+In [44]: all_a[40].href
+
+In [45]: all_a[40]['href']
+Out[45]: '/wiki/Harry_Simmons'
+
+In [46]: for a in all_a:
+    ...:     print(a['href'])
+    ...:
+/wiki/File:George_Pfister.jpg
+/wiki/Catcher
+/wiki/Bound_Brook,_New_Jersey
+/wiki/Somerset,_New_Jersey
+/wiki/Games_played
+/wiki/At_bat
+/wiki/Hit_(baseball)
+/wiki/Brooklyn_Dodgers
+/wiki/Bound_Brook,_New_Jersey
+/wiki/Catcher
+/wiki/Major_League_Baseball
+/wiki/Brooklyn_Dodgers
+/wiki/Brooklyn_Dodgers
+/wiki/New_York_Yankees
+/wiki/Major_League_Baseball
+/wiki/King_of_Baseball
+/wiki/Myocardial_infarction
+/wiki/Somerset_Medical_Center
+#cite_note-1
+/w/index.php?title=George_Pfister&action=edit&section=1
+#cite_ref-1
+http://nl.newsbank.com/nl-search/we/Archives?p_product=LB&p_theme=lb&p_action=search&p_maxdocs=200&p_topdoc=1&p_text_direct-0=0EAE91AA015451F1&p_field_direct-0=document_id&p_perpage=10&p_sort=YMD_date:D&s_trackval=GooglePM
+/wiki/Press-Telegram
+/w/index.php?title=George_Pfister&action=edit&section=2
+https://www.baseball-reference.com/players/p/pfistge01.shtml
+https://www.baseball-reference.com/minors/player.cgi?id=pfiste001geo
+/wiki/Template:King_of_Baseball
+/wiki/Template_talk:King_of_Baseball
+//en.wikipedia.org/w/index.php?title=Template:King_of_Baseball&action=edit
+/wiki/King_of_Baseball
+/wiki/Pants_Rowland
+/wiki/Frank_Shaughnessy
+/wiki/Joe_Engel
+/wiki/Rosy_Ryan
+/wiki/Donie_Bush
+/wiki/Eddie_Mulligan
+/wiki/Fred_Haney
+/wiki/Joe_Buzas
+/wiki/Bill_Weiss
+/wiki/Zinn_Beck
+/wiki/Harry_Simmons
+/wiki/Billy_Hitchcock
+/wiki/Sy_Berger
+/wiki/Oscar_Roettger
+/wiki/Stan_Wasiak
+/wiki/Lefty_Gomez
+/wiki/Max_Patkin
+/wiki/George_Sisler,_Jr.
+---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+<ipython-input-46-d64e22c59722> in <module>()
+      1 for a in all_a:
+----> 2     print(a['href'])
+      3
+
+~/.virtualenvs/python-lessons/lib/python3.6/site-packages/bs4/element.py in __getitem__(self, key)
+   1009         """tag[key] returns the value of the 'key' attribute for the tag,
+   1010         and throws an exception if it's not there."""
+-> 1011         return self.attrs[key]
+   1012
+   1013     def __iter__(self):
+
+KeyError: 'href'
+
+In [47]: for a in all_a:
+    ...:     try:
+    ...:         print(a['href'])
+    ...:     except KeyError:
+    ...:         print("A has not href {}".format(a))
+    ...:
+    ...:
+/wiki/File:George_Pfister.jpg
+/wiki/Catcher
+/wiki/Bound_Brook,_New_Jersey
+/wiki/Somerset,_New_Jersey
+/wiki/Games_played
+/wiki/At_bat
+/wiki/Hit_(baseball)
+/wiki/Brooklyn_Dodgers
+/wiki/Bound_Brook,_New_Jersey
+/wiki/Catcher
+/wiki/Major_League_Baseball
+/wiki/Brooklyn_Dodgers
+/wiki/Brooklyn_Dodgers
+/wiki/New_York_Yankees
+/wiki/Major_League_Baseball
+/wiki/King_of_Baseball
+/wiki/Myocardial_infarction
+/wiki/Somerset_Medical_Center
+#cite_note-1
+/w/index.php?title=George_Pfister&action=edit&section=1
+#cite_ref-1
+http://nl.newsbank.com/nl-search/we/Archives?p_product=LB&p_theme=lb&p_action=search&p_maxdocs=200&p_topdoc=1&p_text_direct-0=0EAE91AA015451F1&p_field_direct-0=document_id&p_perpage=10&p_sort=YMD_date:D&s_trackval=GooglePM
+/wiki/Press-Telegram
+/w/index.php?title=George_Pfister&action=edit&section=2
+https://www.baseball-reference.com/players/p/pfistge01.shtml
+https://www.baseball-reference.com/minors/player.cgi?id=pfiste001geo
+/wiki/Template:King_of_Baseball
+/wiki/Template_talk:King_of_Baseball
+//en.wikipedia.org/w/index.php?title=Template:King_of_Baseball&action=edit
+/wiki/King_of_Baseball
+/wiki/Pants_Rowland
+/wiki/Frank_Shaughnessy
+/wiki/Joe_Engel
+/wiki/Rosy_Ryan
+/wiki/Donie_Bush
+/wiki/Eddie_Mulligan
+/wiki/Fred_Haney
+/wiki/Joe_Buzas
+/wiki/Bill_Weiss
+/wiki/Zinn_Beck
+/wiki/Harry_Simmons
+/wiki/Billy_Hitchcock
+/wiki/Sy_Berger
+/wiki/Oscar_Roettger
+/wiki/Stan_Wasiak
+/wiki/Lefty_Gomez
+/wiki/Max_Patkin
+/wiki/George_Sisler,_Jr.
+A has not href <a class="mw-selflink selflink">George Pfister</a>
+/wiki/Johnny_Lipon
+/wiki/George_Kissell
+/wiki/Jim_Bragan
+/wiki/Sheldon_%22Chief%22_Bender
+/wiki/Tom_Saffell
+/wiki/P._Patrick_McKernan
+/wiki/Roland_Hemond
+/wiki/Dave_Rosenfield
+/wiki/Paul_Snyder_(baseball)
+/wiki/Pat_Gillick
+/wiki/Milo_Hamilton
+/wiki/Don_Mincher
+/wiki/Bill_Valentine
+/wiki/File:Baseball_(crop).jpg
+/wiki/File:Flag_of_the_United_States.svg
+/wiki/File:Crystal_Clear_app_Login_Manager_2.png
+/wiki/Wikipedia:Stub
+//en.wikipedia.org/w/index.php?title=George_Pfister&action=edit
+/wiki/Template:US-baseball-catcher-1910s-stub
+/wiki/Template_talk:US-baseball-catcher-1910s-stub
+//en.wikipedia.org/w/index.php?title=Template:US-baseball-catcher-1910s-stub&action=edit
+
+In [48]: def find_good_links(tag):
+    ...:     if tag.name != 'a':
+    ...:         return False
+    ...:     if
+  File "<ipython-input-48-67b585d2e9ce>", line 4
+    if
+      ^
+SyntaxError: invalid syntax
+
+
+In [49]: def find_good_links(tag):
+    ...:     if tag.name != 'a':
+    ...:         return False
+    ...:     if
+  File "<ipython-input-49-67b585d2e9ce>", line 4
+    if
+      ^
+SyntaxError: invalid syntax
+
+
+In [50]: tag
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-50-69148e5563d7> in <module>()
+----> 1 tag
+
+NameError: name 'tag' is not defined
+
+In [51]: a
+Out[51]: <a class="external text" href="//en.wikipedia.org/w/index.php?title=Template:US-baseball-catcher-1910s-stub&amp;action=edit"><abbr title="Edit this template">e</abbr></a>
+
+In [52]: 'href' in a
+Out[52]: False
+
+In [53]: a.has_attr('href')
+Out[53]: True
+
+In [54]: a.has_attr('hre')
+Out[54]: False
+
+In [55]: def find_good_links(tag):
+    ...:     if tag.name != 'a':
+    ...:         return False
+    ...:     if not tag.has_attr('href'):
+    ...:         return False
+    ...:     if not tag['href'].startswith('/wiki'):
+    ...:         return False
+    ...:     if ':' in tag['href']:
+    ...:         return False
+    ...:     return True
+    ...:
+    ...:
+
+In [56]: all_a = content.find_all(find_good_links)
+
+In [57]: len(all_a)
+Out[57]: 50
+
+In [58]: for a in all_a:
+    ...:     print(a['href'])
+    ...:
+    ...:
+/wiki/Catcher
+/wiki/Bound_Brook,_New_Jersey
+/wiki/Somerset,_New_Jersey
+/wiki/Games_played
+/wiki/At_bat
+/wiki/Hit_(baseball)
+/wiki/Brooklyn_Dodgers
+/wiki/Bound_Brook,_New_Jersey
+/wiki/Catcher
+/wiki/Major_League_Baseball
+/wiki/Brooklyn_Dodgers
+/wiki/Brooklyn_Dodgers
+/wiki/New_York_Yankees
+/wiki/Major_League_Baseball
+/wiki/King_of_Baseball
+/wiki/Myocardial_infarction
+/wiki/Somerset_Medical_Center
+/wiki/Press-Telegram
+/wiki/King_of_Baseball
+/wiki/Pants_Rowland
+/wiki/Frank_Shaughnessy
+/wiki/Joe_Engel
+/wiki/Rosy_Ryan
+/wiki/Donie_Bush
+/wiki/Eddie_Mulligan
+/wiki/Fred_Haney
+/wiki/Joe_Buzas
+/wiki/Bill_Weiss
+/wiki/Zinn_Beck
+/wiki/Harry_Simmons
+/wiki/Billy_Hitchcock
+/wiki/Sy_Berger
+/wiki/Oscar_Roettger
+/wiki/Stan_Wasiak
+/wiki/Lefty_Gomez
+/wiki/Max_Patkin
+/wiki/George_Sisler,_Jr.
+/wiki/Johnny_Lipon
+/wiki/George_Kissell
+/wiki/Jim_Bragan
+/wiki/Sheldon_%22Chief%22_Bender
+/wiki/Tom_Saffell
+/wiki/P._Patrick_McKernan
+/wiki/Roland_Hemond
+/wiki/Dave_Rosenfield
+/wiki/Paul_Snyder_(baseball)
+/wiki/Pat_Gillick
+/wiki/Milo_Hamilton
+/wiki/Don_Mincher
+/wiki/Bill_Valentine
+
+In [59]: %history
+import requests
+resp = requests.get('https://en.wikipedia.org/wiki/George_Pfister')
+resp.status_code
+resp.text[:10]
+resp.text[:100]
+resp.text[10:100:-1]
+[1,2,3,4][::-1]
+resp.text[100:10:-1]
+resp.text
+%colors no
+%colors
+%colors?
+%colors nocolor
+import bs4
+bs4.BeautifulSoup?
+bs4.BeautifulSoup(resp.text)
+soup = bs4.BeautifulSoup(resp.text)
+soup = bs4.BeautifulSoup(resp.text, "html.parser")
+soup.find(id='firstHeading')
+elem = soup.find(id='firstHeading')
+'Hello' == "Hello"
+'Hello' == "Hello" == '''Hello''' == """Hello"""
+'Don't miss'
+'Don\'t miss'
+"Don't miss"
+"\"Don't miss\""
+print("\"Don't miss\"")
+print(""""Don't miss"""")
+print('''"Don't miss"''')
+elem = soup.find(id='firstHeading')
+elem.text
+elem
+elem.name
+content = soup.find(id='mw-content-text')
+all_a = content.find_all('a')
+len(all_al)
+len(all_a)
+%history
+a = all_a[0]
+a.href
+a = all_a[1]
+a.href
+all_a[10].href
+all_a[40].href
+all_a[40]['href']
+for a in all_a:
+    print(a['href'])
+for a in all_a:
+    try:
+        print(a['href'])
+    except KeyError:
+        print("A has not href {}".format(a))
+def find_good_links(tag):
+    if tag.name != 'a':
+        return False
+    if
+def find_good_links(tag):
+    if tag.name != 'a':
+        return False
+    if
+tag
+a
+'href' in a
+a.has_attr('href')
+a.has_attr('hre')
+def find_good_links(tag):
+    if tag.name != 'a':
+        return False
+    if not tag.has_attr('href'):
+        return False
+    if not tag['href'].startswith('/wiki'):
+        return False
+    if ':' in tag['href']:
+        return False
+    return True
+all_a = content.find_all(find_good_links)
+len(all_a)
+for a in all_a:
+    print(a['href'])
+%history
+
+In [60]: l =[1,2,3]
+
+In [61]: l.pop(0)
+Out[61]: 1
+
+In [62]: l
+Out[62]: [2, 3]
+
+In [63]: l.extend([1,2,3])
+
+In [64]: l
+Out[64]: [2, 3, 1, 2, 3]
+
+In [65]: l.extend(set([1,2,3]))
+
+In [66]: l
+Out[66]: [2, 3, 1, 2, 3, 1, 2, 3]
