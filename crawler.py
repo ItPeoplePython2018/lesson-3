@@ -46,14 +46,14 @@ def crawl(url, limit=100):
     while urls and limit:
         limit -= 1
         url = urls.pop(0)
-        our_hearders.append(url)
+        our_headers.append(url)
         print(url)
         links = get_links(url)
         urls.extend(links)
 
-our_hearders = []
+our_headers = []
 crawl('https://en.wikipedia.org/wiki/George_Pfister')
 
 with open('headers.txt', 'w') as f:
-    for nam in our_hearders:
+    for nam in our_headers:
         f.write(str(nam)+'\n')
