@@ -38,19 +38,22 @@ def get_links(url):
 
     return all_a
 
-
 def crawl(url, limit=100):
     """
     Обходит страницы по очереди, получая новый список URL с каждой страницы
     """
-
     urls = [url]
     while urls and limit:
         limit -= 1
         url = urls.pop(0)
+        our_hearders.append(url)
         print(url)
         links = get_links(url)
         urls.extend(links)
 
-
+our_hearders = []
 crawl('https://en.wikipedia.org/wiki/George_Pfister')
+
+with open('headers.txt', 'w') as f:
+    for nam in our_hearders:
+        f.write(str(nam)+'\n')
